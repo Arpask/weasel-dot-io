@@ -4,14 +4,14 @@
 
 @font-face {
   font-family: "Open Sans PX";
-  src: url("/OpenSansPX.ttf") format("truetype");
+  src: url("../public/OpenSansPX.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Open Sans PX Bold";
-  src: url("/OpenSansPXBold.ttf") format("truetype");
+  src: url("../public/OpenSansPXBold.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
