@@ -3122,3 +3122,14 @@ body,
     transform: translate(-50%, -20px);
   }
 }
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
