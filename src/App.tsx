@@ -1342,7 +1342,7 @@ export default function App() {
                 style={{ transform: `scaleY(${1 - totalProgress / 100})` }}
               />
               <div className="card-content">
-                <div className="card-label">Total</div>
+                <div className="card-label">Session</div>
                 <div className="primary">{fmt(sessionRemainingSec)}</div>
                 <div className="of">
                   of{" "}
