@@ -49,6 +49,20 @@ const parseTime = (timeStr: string): number => {
   return Math.max(0, seconds);
 };
 
+// ADD THIS HERE (after line 50):
+/** Polyfill for crypto.randomUUID */
+const generateId = (): string => {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return (crypto as any).randomUUID();
+  }
+  // Fallback for environments without crypto.randomUUID
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
 /** Pie chart component for progress visualization */
 const PieChart = ({
   segments,
@@ -333,7 +347,7 @@ export default function App() {
   const [roundsCount, setRoundsCount] = useState<number>(3);
   const [rounds, setRounds] = useState<TaskResult[][]>(() =>
     Array.from({ length: 3 }, () =>
-      INITIAL_CHAIN.map(() => ({ status: "incomplete", actualSec: null }))
+      INITIAL_CHAIN.map(() => ({ status: "incomplete" as TaskStatus, actualSec: null }))
     )
   );
 
@@ -346,11 +360,11 @@ export default function App() {
       0
     );
 
-  const sessionTargetSec = () =>
-    Array.from({ length: roundsCount }).reduce(
-      (s, _, r) => s + roundTargetSec(r),
-      0
-    );
+    const sessionTargetSec = () =>
+      Array.from({ length: roundsCount }).reduce<number>(
+        (s, _, r) => s + roundTargetSec(r),
+        0
+      );
 
   const [focusMode, setFocusMode] = useState(false);
   const timerAreaRef = useRef<HTMLDivElement | null>(null);
@@ -523,7 +537,7 @@ export default function App() {
     () => roundTargetSec(currentRoundIndex),
     [rounds, tasks, chain, currentRoundIndex]
   );
-  const fullSessionTarget = useMemo(
+  const fullSessionTarget = useMemo<number>(
     () => sessionTargetSec(),
     [rounds, tasks, chain, roundsCount]
   );
@@ -959,7 +973,7 @@ export default function App() {
     playRestartSound();
     setRounds(
       Array.from({ length: roundsCount }, () =>
-        chain.map(() => ({ status: "incomplete", actualSec: null }))
+        chain.map(() => ({ status: "incomplete" as TaskStatus, actualSec: null }))
       )
     );
     setCurrentRoundIndex(0);
@@ -974,12 +988,12 @@ export default function App() {
   };
 
   const handleClearAll = () => {
-    const newId = crypto.randomUUID();
+    const newId = generateId();
     const defaultTask: Task = { id: newId, name: "New Task", targetSec: 60 };
     setTasks([defaultTask]);
     setChain([newId]);
     setRoundsCount(1);
-    setRounds([[{ status: "incomplete", actualSec: null }]]);
+    setRounds([[{ status: "incomplete" as TaskStatus, actualSec: null }]]);
     setCurrentRoundIndex(0);
     setCurrentTaskIndex(0);
     pausedOffsetMs.current = 0;
@@ -1008,7 +1022,7 @@ export default function App() {
     if (chain.length >= 25) {
       return;
     }
-    const newId = crypto.randomUUID();
+    const newId = generateId();
     const newTask: Task = { id: newId, name: "New Task", targetSec: 60 };
     setTasks((prev) => [...prev, newTask]);
     setChain((prev) => [...prev, newId]);
@@ -1137,7 +1151,7 @@ export default function App() {
 
   // Add new task in modal
   const addDraftTask = () => {
-    const newId = crypto.randomUUID();
+    const newId = generateId();
     setDraftChain((prev) => [...prev, newId]);
     setDraftById((prev) => ({
       ...prev,
@@ -1170,7 +1184,7 @@ export default function App() {
       let next = prev;
       if (finalTotal > prev.length) {
         const add = Array.from({ length: finalTotal - prev.length }, () =>
-          chain.map(() => ({ status: "incomplete", actualSec: null }))
+          chain.map(() => ({ status: "incomplete" as TaskStatus, actualSec: null }))
         );
         next = [...prev, ...add];
       } else if (finalTotal < prev.length) {
