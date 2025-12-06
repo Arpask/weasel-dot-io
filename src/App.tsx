@@ -51,8 +51,8 @@ const parseTime = (timeStr: string): number => {
 
 /** Generate a unique ID (fallback for crypto.randomUUID) */
 const generateId = (): string => {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
+  if (typeof crypto !== 'undefined' && (crypto as any).randomUUID) {
+    return (crypto as any).randomUUID();
   }
   // Fallback: simple unique ID generator
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
