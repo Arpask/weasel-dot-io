@@ -342,7 +342,7 @@ export default function App() {
   const [roundsCount, setRoundsCount] = useState<number>(3);
   const [rounds, setRounds] = useState<TaskResult[][]>(() =>
     Array.from({ length: 3 }, () =>
-      INITIAL_CHAIN.map(() => ({ status: "incomplete", actualSec: null }))
+      INITIAL_CHAIN.map((): TaskResult => ({ status: "incomplete" as TaskStatus, actualSec: null }))
     )
   );
 
@@ -641,7 +641,7 @@ export default function App() {
     setRounds((prev) => {
       const copy = prev.map((r) => r.map((t) => ({ ...t })));
       copy[currentRoundIndex][currentTaskIndex] = {
-        status: "incomplete",
+        status: "incomplete" as TaskStatus,
         actualSec: null,
       };
       return copy;
@@ -749,7 +749,7 @@ export default function App() {
       setRounds((prev) => {
         const copy = prev.map((r) => r.map((t) => ({ ...t })));
         copy[currentRoundIndex][prevIdx] = {
-          status: "incomplete",
+          status: "incomplete" as TaskStatus,
           actualSec: null,
         };
         return copy;
@@ -762,7 +762,7 @@ export default function App() {
       setRounds((prev) => {
         const copy = prev.map((r) => r.map((t) => ({ ...t })));
         copy[prevRound][lastTaskIdx] = {
-          status: "incomplete",
+          status: "incomplete" as TaskStatus,
           actualSec: null,
         };
         return copy;
@@ -773,7 +773,7 @@ export default function App() {
     setRounds((prev) => {
       const copy = prev.map((r) => r.map((t) => ({ ...t })));
       copy[currentRoundIndex][currentTaskIndex] = {
-        status: "incomplete",
+        status: "incomplete" as TaskStatus,
         actualSec: null,
       };
       return copy;
@@ -968,7 +968,7 @@ export default function App() {
     playRestartSound();
     setRounds(
       Array.from({ length: roundsCount }, () =>
-        chain.map(() => ({ status: "incomplete", actualSec: null }))
+        chain.map((): TaskResult => ({ status: "incomplete" as TaskStatus, actualSec: null }))
       )
     );
     setCurrentRoundIndex(0);
@@ -988,7 +988,7 @@ export default function App() {
     setTasks([defaultTask]);
     setChain([newId]);
     setRoundsCount(1);
-    setRounds([[{ status: "incomplete", actualSec: null }]]);
+    setRounds([[{ status: "incomplete" as TaskStatus, actualSec: null }]]);
     setCurrentRoundIndex(0);
     setCurrentTaskIndex(0);
     pausedOffsetMs.current = 0;
@@ -1179,7 +1179,7 @@ export default function App() {
       let next = prev;
       if (finalTotal > prev.length) {
         const add = Array.from({ length: finalTotal - prev.length }, () =>
-          chain.map(() => ({ status: "incomplete", actualSec: null }))
+          chain.map((): TaskResult => ({ status: "incomplete" as TaskStatus, actualSec: null }))
         );
         next = [...prev, ...add];
       } else if (finalTotal < prev.length) {
@@ -2086,7 +2086,7 @@ export default function App() {
                           return [
                             ...round,
                             ...Array(toAdd).fill({
-                              status: "incomplete",
+                              status: "incomplete" as TaskStatus,
                               actualSec: null,
                             }),
                           ];
