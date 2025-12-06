@@ -348,7 +348,7 @@ export default function App() {
 
   const sessionTargetSec = () =>
     Array.from({ length: roundsCount }).reduce(
-      (s: number, _: undefined, r: number) => s + roundTargetSec(r),
+      (s: number, _: unknown, r: number) => s + roundTargetSec(r),
       0
     );
 
@@ -517,7 +517,8 @@ export default function App() {
   }, [currentTaskIndex, currentRoundIndex]);
 
   const roundElapsedActual =
-    rounds[currentRoundIndex]?.reduce((s, t) => s + (t?.actualSec || 0), 0) || 0;
+    rounds[currentRoundIndex]?.reduce((s, t) => s + (t?.actualSec || 0), 0) ||
+    0;
 
   const curRoundTarget = useMemo(
     () => roundTargetSec(currentRoundIndex),
@@ -2423,3 +2424,4 @@ export default function App() {
     </>
   );
 }
+
