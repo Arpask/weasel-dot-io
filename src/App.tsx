@@ -348,7 +348,7 @@ export default function App() {
 
   const sessionTargetSec = () =>
     Array.from({ length: roundsCount }).reduce(
-      (s, _, r) => s + roundTargetSec(r),
+      (s: number, _: undefined, r: number) => s + roundTargetSec(r),
       0
     );
 
