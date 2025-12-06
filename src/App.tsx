@@ -49,6 +49,15 @@ const parseTime = (timeStr: string): number => {
   return Math.max(0, seconds);
 };
 
+/** Generate a unique ID (fallback for crypto.randomUUID) */
+const generateId = (): string => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback: simple unique ID generator
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+};
+
 /** Pie chart component for progress visualization */
 const PieChart = ({
   segments,
@@ -517,8 +526,7 @@ export default function App() {
   }, [currentTaskIndex, currentRoundIndex]);
 
   const roundElapsedActual =
-    rounds[currentRoundIndex]?.reduce((s, t) => s + (t?.actualSec || 0), 0) ||
-    0;
+    rounds[currentRoundIndex]?.reduce((s, t) => s + (t?.actualSec || 0), 0) || 0;
 
   const curRoundTarget = useMemo(
     () => roundTargetSec(currentRoundIndex),
@@ -975,7 +983,7 @@ export default function App() {
   };
 
   const handleClearAll = () => {
-    const newId = crypto.randomUUID();
+    const newId = generateId();
     const defaultTask: Task = { id: newId, name: "New Task", targetSec: 60 };
     setTasks([defaultTask]);
     setChain([newId]);
@@ -1009,7 +1017,7 @@ export default function App() {
     if (chain.length >= 25) {
       return;
     }
-    const newId = crypto.randomUUID();
+    const newId = generateId();
     const newTask: Task = { id: newId, name: "New Task", targetSec: 60 };
     setTasks((prev) => [...prev, newTask]);
     setChain((prev) => [...prev, newId]);
@@ -1138,7 +1146,7 @@ export default function App() {
 
   // Add new task in modal
   const addDraftTask = () => {
-    const newId = crypto.randomUUID();
+    const newId = generateId();
     setDraftChain((prev) => [...prev, newId]);
     setDraftById((prev) => ({
       ...prev,
